@@ -7,10 +7,11 @@ APP_NAME="Type4Me"
 APP_EXECUTABLE="Type4Me"
 APP_ICON_NAME="AppIcon"
 APP_BUNDLE_ID="${APP_BUNDLE_ID:-com.type4me.app}"
-APP_VERSION="${APP_VERSION:-0.1.0}"
+APP_VERSION="${APP_VERSION:-1.0.0}"
 APP_BUILD="${APP_BUILD:-1}"
 MIN_SYSTEM_VERSION="${MIN_SYSTEM_VERSION:-14.0}"
 MICROPHONE_USAGE_DESCRIPTION="${MICROPHONE_USAGE_DESCRIPTION:-Type4Me 需要访问麦克风以录制语音并将其转换为文本。}"
+APPLE_EVENTS_USAGE_DESCRIPTION="${APPLE_EVENTS_USAGE_DESCRIPTION:-Type4Me 需要辅助功能权限来注入转写文字到其他应用}"
 LAUNCH_APP="${LAUNCH_APP:-1}"
 INFO_PLIST="$APP_PATH/Contents/Info.plist"
 if [ -n "${CODESIGN_IDENTITY:-}" ]; then
@@ -73,6 +74,10 @@ cat >"$INFO_PLIST" <<EOF
     <string>${MIN_SYSTEM_VERSION}</string>
     <key>NSMicrophoneUsageDescription</key>
     <string>${MICROPHONE_USAGE_DESCRIPTION}</string>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>${APPLE_EVENTS_USAGE_DESCRIPTION}</string>
+    <key>LSUIElement</key>
+    <true/>
     <key>NSHighResolutionCapable</key>
     <true/>
     <key>NSPrincipalClass</key>

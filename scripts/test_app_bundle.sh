@@ -24,10 +24,12 @@ read_plist() {
 [ "$(read_plist CFBundleName)" = "Type4Me" ] || fail "CFBundleName should be Type4Me"
 [ "$(read_plist CFBundleDisplayName)" = "Type4Me" ] || fail "CFBundleDisplayName should be Type4Me"
 [ "$(read_plist CFBundlePackageType)" = "APPL" ] || fail "CFBundlePackageType should be APPL"
-[ "$(read_plist CFBundleShortVersionString)" = "0.1.0" ] || fail "CFBundleShortVersionString should be 0.1.0"
+[ "$(read_plist CFBundleShortVersionString)" = "1.0.0" ] || fail "CFBundleShortVersionString should be 1.0.0"
 [ "$(read_plist CFBundleVersion)" = "1" ] || fail "CFBundleVersion should be 1"
 [ "$(read_plist CFBundleIconFile)" = "AppIcon" ] || fail "CFBundleIconFile should be AppIcon"
 [ "$(read_plist LSMinimumSystemVersion)" = "14.0" ] || fail "LSMinimumSystemVersion should be 14.0"
 [ -n "$(read_plist NSMicrophoneUsageDescription)" ] || fail "NSMicrophoneUsageDescription should be present"
+[ -n "$(read_plist NSAppleEventsUsageDescription)" ] || fail "NSAppleEventsUsageDescription should be present"
+[ "$(read_plist LSUIElement)" = "true" ] || fail "LSUIElement should be true"
 
 echo "PASS: app bundle metadata looks correct"
