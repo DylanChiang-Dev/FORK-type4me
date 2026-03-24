@@ -50,6 +50,11 @@ enum LLMProvider: String, CaseIterable, Codable, Sendable {
     var isOpenAICompatible: Bool {
         self != .claude
     }
+
+    /// Whether this provider's API accepts the `thinking` configuration field.
+    var supportsThinkingConfig: Bool {
+        self == .doubao
+    }
 }
 
 // MARK: - Provider Config Protocol

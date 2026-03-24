@@ -4,6 +4,11 @@ import os
 actor DoubaoChatClient: LLMClient {
 
     private let logger = Logger(subsystem: "com.type4me.llm", category: "DoubaoChatClient")
+    private let provider: LLMProvider
+
+    init(provider: LLMProvider = .doubao) {
+        self.provider = provider
+    }
 
     /// Pre-establish TCP+TLS connection so the first real request skips handshake.
     func warmUp(baseURL: String) async {
@@ -36,7 +41,7 @@ actor DoubaoChatClient: LLMClient {
             model: config.model,
             messages: [ChatMessage(role: "user", content: finalPrompt)],
             stream: true,
-            thinking: ThinkingConfig(type: "disabled")
+            thinking: provider.supportsThinkingConfig ? ThinkingConfig(type: "disabled") : nil
         )
         request.httpBody = try JSONEncoder().encode(body)
 

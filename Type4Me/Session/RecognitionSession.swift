@@ -37,10 +37,11 @@ actor RecognitionSession {
 
     /// Return the appropriate LLM client for the currently selected provider.
     private func currentLLMClient() -> any LLMClient {
-        if KeychainService.selectedLLMProvider == .claude {
+        let provider = KeychainService.selectedLLMProvider
+        if provider == .claude {
             return ClaudeChatClient()
         }
-        return DoubaoChatClient()
+        return DoubaoChatClient(provider: provider)
     }
 
     /// Pre-initialize audio subsystem so the first recording starts instantly.
