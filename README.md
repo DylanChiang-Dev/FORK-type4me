@@ -3,6 +3,25 @@ MacOS语音输入工具，实时识别、大模型文本优化、全本地存储
 
 <img width="420" height="78" alt="image" src="https://github.com/user-attachments/assets/dbc676e0-6128-4bed-89a2-553d2d1a197c" />
 
+<video src="https://github.com/user-attachments/assets/eff0ed4b-f31a-41a0-8a1b-09e800cb2657" width="600" controls></video>
+
+**[下载 Type4Me v1.1.0](https://github.com/joewongjc/type4me/releases/download/v1.1.0/Type4Me-v1.1.0.dmg)** (macOS 14+)
+
+> **首次打开提示安全警告？** 这是 macOS 对所有非 App Store 应用的正常行为，不影响使用。
+>
+> **方法一：通过系统设置（推荐）**
+> 1. 双击打开 Type4Me.app，弹出安全提示后点击「完成」
+> 2. 打开「系统设置」→「隐私与安全性」，滚动到底部「安全性」部分
+> 3. 找到 "已阻止打开 Type4Me" 的提示，点击「仍要打开」
+> 4. 输入密码确认，再次点击「打开」
+>
+> 只需操作一次，之后可正常启动。
+>
+> **方法二：通过终端**
+> ```bash
+> xattr -d com.apple.quarantine /Applications/Type4Me.app
+> ```
+
 ## 为什么做 Type4Me
 市面上语音输入法，至少命中以下问题之一：贵（$12/月）、封闭（不可导出记录）、扩展性差（不能自定义Prompt）、慢。
 
