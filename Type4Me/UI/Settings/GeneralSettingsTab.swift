@@ -281,7 +281,7 @@ struct ASRSettingsCard: View, SettingsCardHelpers {
                 .frame(width: 100, alignment: .leading)
             Picker("", selection: $selectedASRProvider) {
                 ForEach(ASRProvider.allCases.filter {
-                    ASRProviderRegistry.entry(for: $0)?.isAvailable ?? false
+                    $0.isLocal || (ASRProviderRegistry.entry(for: $0)?.isAvailable ?? false)
                 }, id: \.self) { provider in
                     Text(provider.displayName).tag(provider)
                 }
@@ -351,9 +351,34 @@ struct ASRSettingsCard: View, SettingsCardHelpers {
 
     private var localModelSection: some View {
         VStack(spacing: 0) {
-            ForEach(Array(ModelManager.StreamingModel.allCases.enumerated()), id: \.element) { index, model in
-                if index > 0 { SettingsDivider() }
-                modelRow(model)
+            if !isASRProviderAvailable {
+                // SherpaOnnx framework not compiled — guide user
+                VStack(alignment: .leading, spacing: 8) {
+                    Text(L(
+                        "本地识别需要先编译 SherpaOnnx 引擎。请在终端执行以下命令后重新构建 app:",
+                        "Local ASR requires building the SherpaOnnx engine first. Run the following in terminal, then rebuild:"
+                    ))
+                    .font(.system(size: 12))
+                    .foregroundStyle(TF.settingsTextSecondary)
+
+                    Text("bash scripts/build-sherpa.sh && bash scripts/deploy.sh")
+                        .font(.system(size: 11, design: .monospaced))
+                        .padding(8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(RoundedRectangle(cornerRadius: 6).fill(TF.settingsBg.opacity(0.5)))
+
+                    Link(
+                        L("查看完整说明 →", "View full instructions →"),
+                        destination: URL(string: "https://github.com/joewongjc/type4me#从源码构建")!
+                    )
+                    .font(.system(size: 12, weight: .medium))
+                }
+                .padding(.vertical, 8)
+            } else {
+                ForEach(Array(ModelManager.StreamingModel.allCases.enumerated()), id: \.element) { index, model in
+                    if index > 0 { SettingsDivider() }
+                    modelRow(model)
+                }
             }
         }
     }
