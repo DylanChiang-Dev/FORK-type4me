@@ -14,6 +14,7 @@ enum LLMProviderRegistry {
         .deepseek:    OpenAICompatibleLLMConfig<DeepSeekLLMTag>.self,
         .zhipu:       OpenAICompatibleLLMConfig<ZhipuLLMTag>.self,
         .claude:      ClaudeLLMConfig.self,
+        .ollama:      OpenAICompatibleLLMConfig<OllamaLLMTag>.self,
     ]
 
     static func configType(for provider: LLMProvider) -> (any LLMProviderConfig.Type)? {

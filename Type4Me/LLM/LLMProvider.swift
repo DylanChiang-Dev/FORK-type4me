@@ -14,6 +14,7 @@ enum LLMProvider: String, CaseIterable, Codable, Sendable {
     case deepseek
     case zhipu
     case claude
+    case ollama
 
     var displayName: String {
         switch self {
@@ -28,6 +29,7 @@ enum LLMProvider: String, CaseIterable, Codable, Sendable {
         case .deepseek:    return L("DeepSeek (深度求索)", "DeepSeek")
         case .zhipu:       return L("智谱 (GLM)", "Zhipu (GLM)")
         case .claude:      return "Claude (Anthropic)"
+        case .ollama:      return L("Ollama (本地模型)", "Ollama (Local)")
         }
     }
 
@@ -44,11 +46,17 @@ enum LLMProvider: String, CaseIterable, Codable, Sendable {
         case .deepseek:    return "https://api.deepseek.com"
         case .zhipu:       return "https://open.bigmodel.cn/api/paas/v4"
         case .claude:      return "https://api.anthropic.com/v1"
+        case .ollama:      return "http://localhost:11434/v1"
         }
     }
 
     var isOpenAICompatible: Bool {
         self != .claude
+    }
+
+    /// Whether this provider requires an API key for authentication.
+    var requiresAPIKey: Bool {
+        self != .ollama
     }
 
     /// Whether this provider's API accepts the `thinking` configuration field.

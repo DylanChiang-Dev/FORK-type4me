@@ -20,6 +20,7 @@ enum OpenAILLMTag:      OpenAICompatibleLLMTag { static let provider = LLMProvid
 enum GeminiLLMTag:      OpenAICompatibleLLMTag { static let provider = LLMProvider.gemini }
 enum DeepSeekLLMTag:    OpenAICompatibleLLMTag { static let provider = LLMProvider.deepseek }
 enum ZhipuLLMTag:       OpenAICompatibleLLMTag { static let provider = LLMProvider.zhipu }
+enum OllamaLLMTag:      OpenAICompatibleLLMTag { static let provider = LLMProvider.ollama }
 
 // MARK: - Generic Config
 
@@ -32,8 +33,8 @@ struct OpenAICompatibleLLMConfig<Tag: OpenAICompatibleLLMTag>: LLMProviderConfig
         return [
             CredentialField(
                 key: "apiKey", label: "API Key",
-                placeholder: "sk-...",
-                isSecure: true, isOptional: false, defaultValue: ""
+                placeholder: p.requiresAPIKey ? "sk-..." : L("可选", "Optional"),
+                isSecure: true, isOptional: !p.requiresAPIKey, defaultValue: ""
             ),
             CredentialField(
                 key: "model", label: L("模型", "Model"),
@@ -53,8 +54,11 @@ struct OpenAICompatibleLLMConfig<Tag: OpenAICompatibleLLMTag>: LLMProviderConfig
     let baseURL: String
 
     init?(credentials: [String: String]) {
-        guard let key = credentials["apiKey"], !key.isEmpty,
-              let model = credentials["model"], !model.isEmpty
+        let key = credentials["apiKey"] ?? ""
+        if Tag.provider.requiresAPIKey {
+            guard !key.isEmpty else { return nil }
+        }
+        guard let model = credentials["model"], !model.isEmpty
         else { return nil }
         self.apiKey = key
         self.model = model
