@@ -1144,6 +1144,18 @@ class StreamingSenseVoice:
         return effective_size % self.chunk_size or self.chunk_size
 
     def inference(self, speech):
+        if self._onnx_session is not None:
+            x = speech.numpy()[np.newaxis, :, :]  # (1, T, 560)
+            x_length = np.array([x.shape[1]], dtype=np.int32)
+            language = np.array([0], dtype=np.int32)
+            text_norm = np.array([14], dtype=np.int32)  # withitn
+            result = self._onnx_session.run(
+                None,
+                {"x": x, "x_length": x_length, "language": language, "text_norm": text_norm},
+            )
+            return torch.from_numpy(result[0][0, 4:])  # skip query tokens
+
+        # PyTorch fallback
         speech = speech[None, :, :]
         speech_lengths = torch.tensor([speech.shape[1]])
         speech = speech.to(self.device)
