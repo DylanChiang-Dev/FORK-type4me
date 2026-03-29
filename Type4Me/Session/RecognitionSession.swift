@@ -629,9 +629,23 @@ actor RecognitionSession {
 
     // MARK: - Internal helpers
 
+    private var lastChunkSendLog: ContinuousClock.Instant?
+    private var chunkSendCount: Int = 0
+
     private func sendAudioToASR(_ data: Data) async throws {
         guard let client = asrClient else { return }
+        let t0 = ContinuousClock.now
         try await client.sendAudio(data)
+        let elapsed = ContinuousClock.now - t0
+        chunkSendCount += 1
+        // Log every 50 chunks (~10s) or if send took >200ms
+        let shouldLog = chunkSendCount % 50 == 0
+            || elapsed > .milliseconds(200)
+            || lastChunkSendLog == nil
+        if shouldLog {
+            DebugFileLogger.log("audio chunk #\(chunkSendCount) sent \(data.count)B in \(elapsed)")
+            lastChunkSendLog = ContinuousClock.now
+        }
     }
 
     private func setupAudioChunkPipeline() -> AsyncStream<Data>.Continuation {
