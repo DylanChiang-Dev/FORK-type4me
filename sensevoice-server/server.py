@@ -108,7 +108,7 @@ def main():
     parser.add_argument("--textnorm", action="store_true", default=True, help="Enable ITN (punctuation + number formatting)")
     parser.add_argument("--no-textnorm", dest="textnorm", action="store_false")
     parser.add_argument("--padding", type=int, default=8, help="Encoder context padding frames (higher = more accurate, slower)")
-    parser.add_argument("--chunk-size", type=int, default=8, help="Encoder chunk size in LFR frames (~60ms each)")
+    parser.add_argument("--chunk-size", type=int, default=10, help="Encoder chunk size in LFR frames (~60ms each)")
     args = parser.parse_args()
 
     global _model

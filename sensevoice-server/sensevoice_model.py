@@ -1241,7 +1241,7 @@ def load_model(
     language="auto",
     textnorm=True,
     padding=8,
-    chunk_size=8,
+    chunk_size=10,
 ):
     """Load SenseVoice model and create a StreamingSenseVoice wrapper.
 
