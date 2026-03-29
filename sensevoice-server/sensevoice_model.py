@@ -24,6 +24,17 @@ from torch import nn
 import torch.nn.functional as F
 from typing import Iterable, Optional
 
+# Patch FunASR's register decorator to work with PyInstaller.
+# inspect.getsourcelines() fails when source is frozen in a binary.
+import inspect
+_orig_getsourcelines = inspect.getsourcelines
+def _safe_getsourcelines(obj):
+    try:
+        return _orig_getsourcelines(obj)
+    except OSError:
+        return ([""], 0)
+inspect.getsourcelines = _safe_getsourcelines
+
 from funasr.register import tables
 from funasr.models.ctc.ctc import CTC
 from funasr.utils.datadir_writer import DatadirWriter
